@@ -82,6 +82,21 @@ public class JoinRequestController {
         /*
          * TODO ➊ 初期表示情報取得結果に応じて、以下の条件文を完成させる。
          */
+        // ① レスポンスが存在しない場合
+        if (responseForm.isEmpty()) {
+            // メッセージプロパティから notRequestClubMessage を取得する
+            String notRequestClubMessage = messageSource.getMessage("notRequestClubMessage", null, Locale.getDefault());
+            // 取得したメッセージをオブジェクトに追加する
+            mav.addObject("notRequestClubMessage", notRequestClubMessage);
+            // formから取得したメッセージをオブジェクトに追加する
+            mav.addObject("joinRequestCompleteMessage", paramForm.getMessage());
+        } else {
+            // ② それ以外(=レスポンスが存在する場合)
+            // レスポンスをオブジェクトに追加
+            mav.addObject("responseForm", responseForm);
+            // formから取得したメッセージをオブジェクトに追加する
+            mav.addObject("joinRequestCompleteMessage", paramForm.getMessage());
+        }
 
         mav.addObject("leaderClubId", leaderClubId);
 
@@ -118,6 +133,21 @@ public class JoinRequestController {
             /*
              * TODO ➋ インサートの成功、失敗に応じて、処理を変更する。
              */
+            // ① 登録処理の戻り値がTrueの場合
+            if (result) {
+                // メッセージプロパティから joinRequestCompleteMessage を取得する
+                String joinRequestCompleteMessage = messageSource.getMessage("joinRequestCompleteMessage", null, Locale.getDefault());
+                // 取得したメッセージをformにセットする
+                paramForm.setMessage(joinRequestCompleteMessage);
+                // formから取得したメッセージをオブジェクトに追加する
+                redirectAttributes.addFlashAttribute("joinOkMessage", joinRequestCompleteMessage);
+                // /joinRequest にリダイレクトする
+                mav.setViewName("redirect:/joinRequest");
+            } else {
+                // ② それ以外(=登録処理の戻り値がFalseの場合)
+                // エラー画面に遷移する
+                mav.setViewName("error");
+            }
 
         } catch (Exception e) {
             mav.setViewName("error");

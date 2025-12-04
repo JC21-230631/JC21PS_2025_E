@@ -1,5 +1,5 @@
 package jp.co.jc21ps.activity_management.controller;
-
+ 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -16,34 +16,34 @@ import jp.co.jc21ps.activity_management.dto.SessionDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpSession;
-
+ 
 @Controller
 @RequestMapping("/participantList")
 public class ParticipantListController {
-
+ 
     private final ParticipantListService participantListService;
     private final CommonService commonService;
     private final MessageSource messageSource;
-
+ 
     public ParticipantListController(ParticipantListService participantListService, CommonService commonService,
             MessageSource messageSource) {
         this.participantListService = participantListService;
         this.commonService = commonService;
         this.messageSource = messageSource;
     }
-
+ 
     @GetMapping
     public ModelAndView dispParticipantList(@RequestParam(value = "activityId", required = true) String activityId,
             HttpSession session) {
-
+ 
         ModelAndView mav = new ModelAndView();
-
+ 
         // 活動IDが存在しない場合、エラー画面に遷移
         if (activityId.isEmpty()) {
             mav.setViewName("error");
             return mav;
         }
-
+ 
         /*
          * TODO ➊ セッションからuserId, clubIdを取得
          */
@@ -73,7 +73,7 @@ public class ParticipantListController {
 
             // 返却用のリスト
             List<ParticipantListForm> responseListForm = new ArrayList<>();
-
+ 
             /*
              * ➍ TODO responseListFormに値をセット
              */
@@ -104,9 +104,10 @@ public class ParticipantListController {
         } catch (Exception e) {
             mav.setViewName("error");
         }
-
+ 
         return mav;
-
+ 
     }
-
+ 
 }
+ 
